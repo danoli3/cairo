@@ -68,9 +68,10 @@ SET(FONTCONFIG_INCLUDE_DIRS
 )
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(FONTCONFIG
+find_package_handle_standard_args(Fontconfig
     REQUIRED_VARS FONTCONFIG_LIBRARIES FONTCONFIG_INCLUDE_DIRS
-    FAIL_MESSAGE "Could NOT find FONTCONFIG, try to set the path to FONTCONFIG root folder in the system variable FONTCONFIG"
+    FAIL_MESSAGE "Could NOT find Fontconfig, try to set the path to Fontconfig root folder in the system variable FONTCONFIG"
 )
+
 
 MARK_AS_ADVANCED(FONTCONFIG_INCLUDE_DIR FONTCONFIG_INCLUDE_DIRS FONTCONFIG_LIBRARY FONTCONFIG_LIBRARIES)

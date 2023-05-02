@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
 project(cairo)
-cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -37,5 +37,39 @@ if(FREETYPE_FOUND)
     list(APPEND CAIRO_LIBS ${FREETYPE_LIBRARIES} ${BZIP2_LIBRARIES})
 endif()
 
+# Use options to disable features
+if(NOT BUILD_GTK_DOC)
+    add_definitions(-DCAIRO_NO_GTK_DOC)
+endif()
+
+if(NOT BUILD_TESTS)
+    add_definitions(-DCAIRO_NO_TESTS)
+endif()
+
+if(NOT BUILD_DEPENDENCY_TRACKING)
+    add_definitions(-DCAIRO_NO_DEPENDENCY_TRACKING)
+endif()
+
+if(NOT BUILD_XLIB)
+    add_definitions(-DCAIRO_NO_XLIB)
+endif()
+
+if(NOT BUILD_QT)
+    add_definitions(-DCAIRO_NO_QT)
+endif()
+
+if(NOT BUILD_QUARTZ_FONT)
+    add_definitions(-DCAIRO_NO_QUARTZ_FONT)
+endif()
+
+if(NOT BUILD_QUARTZ)
+    add_definitions(-DCAIRO_NO_QUARTZ)
+endif()
+
+if(NOT BUILD_QUARTZ_IMAGE)
+    add_definitions(-DCAIRO_NO_QUARTZ_IMAGE)
+endif()
+
 include_directories(src)
 add_subdirectory(src)
+

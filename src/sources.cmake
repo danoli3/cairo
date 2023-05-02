@@ -36,6 +36,8 @@ set(cairo_private
     cairo-image-surface-private.h
     cairo-list-inline.h
     cairo-list-private.h
+    cairo-line-private.h
+    cairo-line-inline.h
     cairo-malloc-private.h
     cairo-mempool-private.h
     cairo-mutex-impl-private.h
@@ -123,6 +125,7 @@ set(cairo_sources
     cairo-gstate.c 
     cairo-hash.c 
     cairo-hull.c 
+    cairo-line.c 
     cairo-image-compositor.c 
     cairo-image-info.c 
     cairo-image-source.c 

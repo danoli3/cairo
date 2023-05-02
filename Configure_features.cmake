@@ -70,8 +70,8 @@ if(X11_FOUND)
 endif()
 
 if(ZLIB_FOUND)
-    set(CAIRO_HAS_PS_SURFACE 1)
-    set(CAIRO_HAS_PDF_SURFACE 1)
+    set(CAIRO_HAS_PS_SURFACE 0)
+    set(CAIRO_HAS_PDF_SURFACE 0)
 endif()
 
 if(SKIA_FOUND)
@@ -90,10 +90,12 @@ set(CAIRO_HAS_GLX_FUNCTIONS 0)
 set(CAIRO_HAS_WGL_FUNCTIONS 0)
 set(CAIRO_HAS_TEST_SURFACES 0)
 set(CAIRO_HAS_TEE_SURFACE 0)
+set(CAIRO_HAS_IMAGE_SURFACE 1)
 
 set(CAIRO_HAS_PTHREAD 0)
 set(CAIRO_HAS_TRACE 0)
 set(CAIRO_HAS_SYMBOL_LOOKUP 0)
+set(CAIRO_HAS_PDF_SURFACE 0)
 
 configure_file(features.h.cmake ${CMAKE_BINARY_DIR}/cairo-features.h)
 configure_file(features.h.cmake ${CMAKE_BINARY_DIR}/src/cairo-features.h)

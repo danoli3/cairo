@@ -26,6 +26,8 @@ SET(_PIXMAN_ROOT_HINTS
     $ENV{PIXMAN}
     ${CMAKE_FIND_ROOT_PATH}
     ${PIXMAN_ROOT_DIR}
+    ${PIXMAN_ROOT}
+    ${PIXMAN_INCLUDE_DIR}
 ) 
 
 SET(_PIXMAN_ROOT_PATHS
@@ -90,7 +92,7 @@ if (NOT PIXMAN_VERSION)
 endif(NOT PIXMAN_VERSION)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(PIXMAN
+find_package_handle_standard_args(Pixman
     REQUIRED_VARS PIXMAN_LIBRARIES PIXMAN_INCLUDE_DIRS
     VERSION_VAR PIXMAN_VERSION
     FAIL_MESSAGE "Could NOT find PIXMAN, try to set the path to PIXMAN root folder in the system variable PIXMAN"
