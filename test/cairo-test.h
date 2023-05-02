@@ -58,7 +58,9 @@ typedef unsigned __int64 uint64_t;
 #define _USE_MATH_DEFINES
 
 #include <float.h>
+#if _MSC_VER <= 1600
 #define isnan(x) _isnan(x)
+#endif
 
 #endif
 
@@ -105,10 +107,6 @@ cairo_test_NaN (void)
 
 #ifndef MAX
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
-#endif
-
-#ifndef ARRAY_LENGTH
-#define ARRAY_LENGTH(__array) ((int) (sizeof (__array) / sizeof (__array[0])))
 #endif
 
 #define CAIRO_TEST_OUTPUT_DIR "output"
@@ -320,6 +318,10 @@ cairo_test_get_reference_image (cairo_test_context_t *ctx,
 
 cairo_bool_t
 cairo_test_mkdir (const char *path);
+
+cairo_t *
+cairo_test_create (cairo_surface_t *surface,
+		   const cairo_test_context_t *ctx);
 
 CAIRO_END_DECLS
 

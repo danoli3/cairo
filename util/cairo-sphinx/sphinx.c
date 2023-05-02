@@ -1,3 +1,11 @@
+/*
+ * The intention for sphinx is for detection of rendering errors inside
+ * applications by simultaneously rendering on to the target device and on
+ * an image surface and comparing the two. If it found a discrepancy, it
+ * would then dump the trace that reproduces the error. (Then apply
+ * delta-debugging to reduce that down to a minimal trace.)
+ */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -7,7 +15,6 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <sys/socket.h>
-#include <sys/poll.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -15,6 +22,14 @@
 #include <errno.h>
 #include <assert.h>
 #include <pthread.h>
+
+#if defined(HAVE_POLL_H)
+#include <poll.h>
+#elif defined(HAVE_SYS_POLL_H)
+#include <sys/poll.h>
+#else
+#error No poll.h equivalent found
+#endif
 
 #include <cairo.h>
 #include <cairo-script.h>
@@ -25,6 +40,10 @@
 
 #ifndef CAIRO_HAS_REAL_PTHREAD
 # error "cairo-sphinx needs real pthreads"
+#endif
+
+#ifndef MAP_NORESERVE
+#define MAP_NORESERVE 0
 #endif
 
 #define DATA_SIZE (256 << 20)
