@@ -26,15 +26,8 @@
  *	    Adrian Johnson <ajohnson@redneon.com>
  */
 
-/* We require Windows 2000 features such as GetDefaultPrinter() */
-#if !defined(WINVER) || (WINVER < 0x0500)
-# define WINVER 0x0500
-#endif
-#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0500)
-# define _WIN32_WINNT 0x0500
-#endif
-
 #include "cairo-boilerplate-private.h"
+#include "cairo-malloc-private.h"
 
 #if CAIRO_CAN_TEST_WIN32_PRINTING_SURFACE
 
@@ -131,7 +124,7 @@ create_printer_dc (win32_target_closure_t *ptc)
 
     ptc->dc = NULL;
     GetDefaultPrinter (NULL, &size);
-    printer_name = malloc (size);
+    printer_name = _cairo_malloc (size);
 
     if (printer_name == NULL)
 	return;

@@ -50,9 +50,7 @@
  * Author: Kristian Høgsberg <krh@redhat.com>
  */
 
-#if HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #if HAVE_UNISTD_H
 #include <unistd.h>
@@ -62,13 +60,17 @@
 #include <string.h>
 
 #include <cairo.h>
+
+#if CAIRO_HAS_INTERPRETER
 #include <cairo-script-interpreter.h>
+#endif
 
 #if CAIRO_CAN_TEST_PDF_SURFACE
 #include <poppler.h>
 #endif
 
 #if CAIRO_CAN_TEST_SVG_SURFACE
+#define RSVG_DISABLE_DEPRECATION_WARNINGS
 #include <librsvg/rsvg.h>
 #ifndef RSVG_CAIRO_H
 #include <librsvg/rsvg-cairo.h>

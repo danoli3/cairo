@@ -24,14 +24,21 @@ test_sources = [
   'bug-spline.c',
   'big-trap.c',
   'bilevel-image.c',
+  'bug-277.c',
+  'bug-361.c',
   'bug-40410.c',
+  'bug-431.c',
+  'bug-448.c',
+  'bug-535.c',
   'bug-51910.c',
+  'bug-75705.c',
   'bug-84115.c',
   'bug-bo-rectangular.c',
   'bug-bo-collins.c',
   'bug-bo-ricotz.c',
   'bug-source-cu.c',
   'bug-extents.c',
+  'bug-image-compositor.c',  
   'bug-seams.c',
   'caps.c',
   'checkerboard.c',
@@ -89,6 +96,7 @@ test_sources = [
   'create-for-stream.c',
   'create-from-broken-png-stream.c',
   'create-from-png.c',
+  'create-from-png-16bit.c',
   'create-from-png-stream.c',
   'culled-glyphs.c',
   'curve-to-as-line-to.c',
@@ -144,7 +152,6 @@ test_sources = [
   'font-face-get-type.c',
   'font-matrix-translation.c',
   'font-options.c',
-  #'font-variations.c',
   'glyph-cache-pressure.c',
   'get-and-set.c',
   'get-clip.c',
@@ -158,6 +165,7 @@ test_sources = [
   'group-paint.c',
   'group-state.c',
   'group-unaligned.c',
+  'hairline.c',
   'half-coverage.c',
   'halo.c',
   'hatchings.c',
@@ -229,7 +237,9 @@ test_sources = [
   'operator-alpha-alpha.c',
   'operator-clear.c',
   'operator-source.c',
+  'operator-www.c',
   'outline-tolerance.c',
+  'overflow.c',
   'over-above-source.c',
   'over-around-source.c',
   'over-below-source.c',
@@ -277,6 +287,8 @@ test_sources = [
   'record-neg-extents.c',
   'record-mesh.c',
   'record-replay-extend.c',
+  'record-transform-paint.c',
+  'record-write-png.c',
   'recording-ink-extents.c',
   'recording-surface-pattern.c',
   'recording-surface-extend.c',
@@ -295,6 +307,7 @@ test_sources = [
   'rotated-clip.c',
   'rounded-rectangle-fill.c',
   'rounded-rectangle-stroke.c',
+  'round-join-bug-520.c',
   'sample.c',
   'scale-down-source-surface-paint.c',
   'scale-offset-image.c',
@@ -316,6 +329,7 @@ test_sources = [
   'show-text-current-point.c',
   'shape-general-convex.c',
   'shape-sierpinski.c',
+  'shifted-operator.c',
   'simple.c',
   'skew-extreme.c',
   'smask.c',
@@ -356,6 +370,7 @@ test_sources = [
   'text-glyph-range.c',
   'text-pattern.c',
   'text-rotate.c',
+  'text-subpixel.c',
   'text-transform.c',
   'text-unhinted-metrics.c',
   'text-zero-len.c',
@@ -377,9 +392,11 @@ test_sources = [
   'unclosed-strokes.c',
   'user-data.c',
   'user-font.c',
+  'user-font-color.c',
   'user-font-mask.c',
   'user-font-proxy.c',
   'user-font-rescale.c',
+  'user-font-subpixel.c',
   'world-map.c',
   'white-in-noop.c',
   'xcb-huge-image-shm.c',
@@ -398,8 +415,12 @@ test_pthread_sources = [
   'pthread-similar.c',
 ]
 
+# Only font-variations.c is ft-specific according to Makefile.sources, the other
+# depend on fontconfig
 test_ft_font_sources = [
+  'font-variations.c',
   'bitmap-font.c',
+  'ft-color-font.c',
   'ft-font-create-for-ft-face.c',
   'ft-show-glyphs-positioning.c',
   'ft-show-glyphs-table.c',
@@ -408,24 +429,25 @@ test_ft_font_sources = [
   'ft-text-antialias-none.c',
 ]
 
-test_gl_sources = [
-  'gl-device-release.c',
-  'gl-oversized-surface.c',
-  'gl-surface-source.c',
+test_ft_svg_font_sources = [
+  'ft-svg-color-font.c',
 ]
 
-test_egl_sources = [
-  'egl-oversized-surface.c',
-  'egl-surface-source.c',
+test_ft_svg_ttx_font_sources = [
+  'ft-svg-cairo-logo.c',
+  'ft-svg-render.c',
+  'ft-svg-render-color.c'
 ]
 
 test_quartz_sources = [
   'quartz-surface-source.c',
+  'quartz-color-font.c',
 ]
 
 test_pdf_sources = [
   'pdf-features.c',
   'pdf-mime-data.c',
+  'pdf-operators-text.c',
   'pdf-surface-source.c',
   'pdf-tagged-text.c',
 ]
@@ -461,6 +483,7 @@ test_multi_page_sources = [
 ]
 
 test_fallback_resolution_sources = [
+  'create-regions.c',
   'fallback-resolution.c',
 ]
 
@@ -496,16 +519,34 @@ ps2png_sources = [
   'ps2png.c',
 ]
 
+test_ttx_fonts = [
+  'cairo-logo-font.ttx',
+  'cairo-svg-test-color.ttx',
+  'cairo-svg-test-doc.ttx',
+  'cairo-svg-test-fill.ttx',
+  'cairo-svg-test-gradient.ttx',
+  'cairo-svg-test-path.ttx',
+  'cairo-svg-test-shapes.ttx',
+  'cairo-svg-test-stroke.ttx',
+  'cairo-svg-test-transform.ttx',
+]
+
 build_any2ppm = false
 has_multipage_surfaces = false
 add_fallback_resolution = false
 
-if conf.get('HAVE_REAL_PTHREAD', 0) == 1
+if conf.get('CAIRO_HAS_REAL_PTHREAD', 0) == 1
   test_sources += test_pthread_sources
 endif
 
 if feature_conf.get('CAIRO_HAS_FT_FONT', 0) == 1 and feature_conf.get('CAIRO_HAS_FC_FONT', 0) == 1
   test_sources += test_ft_font_sources
+  if conf.get('HAVE_FT_SVG_DOCUMENT', 0) == 1
+    test_sources += test_ft_svg_font_sources
+    if conf.get('CAIRO_CAN_TEST_TTX_FONT', 0) == 1
+      test_sources += test_ft_svg_ttx_font_sources
+    endif
+  endif
 endif
 
 if feature_conf.get('CAIRO_HAS_QUARTZ_SURFACE', 0) == 1
@@ -544,10 +585,6 @@ if feature_conf.get('CAIRO_HAS_XLIB_XRENDER_SURFACE', 0) == 1
   test_sources += test_xlib_xrender_sources
 endif
 
-if feature_conf.get('CAIRO_HAS_EGL_FUNCTIONS', 0) == 1
-  test_sources += test_egl_sources
-endif
-
 if has_multipage_surfaces
   test_sources += test_multi_page_sources
 endif
@@ -564,8 +601,6 @@ cairo_test_constructors = custom_target('cairo-test-constructors.c',
   input: files(test_sources),
   output: 'cairo-test-constructors.c',
   command: [python3, files('make-cairo-test-constructors.py')[0], '@OUTPUT@', '@INPUT@'])
-
-incpdiff = include_directories('pdiff')
 
 test_depends = []
 
@@ -591,30 +626,50 @@ endif
 
 if build_any2ppm
   any2ppm_exe = executable('any2ppm', 'any2ppm.c',
-    c_args: ['-DHAVE_CONFIG_H'],
-    include_directories: [incbase, incsrc, inccairoscript],
-    link_with: [libcairo, libcairoscript],
-    dependencies: deps + test_deps,
+    include_directories: [incbase],
+    dependencies: deps + test_deps + [libcairo_dep, libcairoscript_dep],
   )
   test_depends += [any2ppm_exe]
 endif
 
-if have_shm
+if have_shm and conf.get('CAIRO_HAS_INTERPRETER', 0) == 1
   cairo_test_trace_exe = executable('cairo-test-trace', cairo_test_trace_sources,
-  include_directories: [incbase, incsrc, incboilerplate, incpdiff, inccairoscript, inccairomissing],
-  c_args: ['-DHAVE_CONFIG_H'] + pthread_c_args,
-  link_with: [libcairo, libcairoboilerplate, libpdiff, libcairoscript, libcairomissing],
+  include_directories: [incbase],
+  c_args: pthread_c_args,
   link_args: extra_link_args,
-  dependencies: deps + test_deps + [rt_dep])
+  dependencies: deps + test_deps + [rt_dep, libcairo_dep, cairoboilerplate_dep, libpdiff_dep, libcairomissing_dep, libcairoscript_dep])
 endif
 
 exe = executable('cairo-test-suite', [cairo_test_suite_sources, test_sources, cairo_test_constructors],
-  include_directories: [incbase, incsrc, incboilerplate, incpdiff],
-  c_args: ['-DHAVE_CONFIG_H'],
-  link_with: [libcairo, libcairoboilerplate, libpdiff],
+  include_directories: [incbase],
   link_args: extra_link_args,
-  dependencies: deps + test_deps,
+  dependencies: deps + test_deps + [libcairo_dep, cairoboilerplate_dep,
+    libpdiff_dep],
 )
+
+build_dir_files = ['completion.bash', 'index.html', 'testtable.js', 'view-test-results.py']
+foreach file : build_dir_files
+  configure_file(input: file, output : file, copy: true)
+endforeach
+
+if build_machine.system() != 'windows'
+  run_command('ln', '-sf',
+              meson.current_source_dir(),
+              meson.current_build_dir() / 'srcdir',
+              check: true)
+endif
+
+if ttx.found()
+  # By default, if the output file exists, ttx creates a new name. We specify the full
+  # output name to make ttx overwrite the existing file instead of creating a new file.
+  foreach ttx_font : test_ttx_fonts
+    custom_target(ttx_font,
+                  input: ttx_font,
+                  command: [ ttx, '-q', '-o', '@OUTDIR@' / '@BASENAME@.ttf', '@INPUT@' ],
+                  output: '@BASENAME@.ttf',
+                  build_by_default: true)
+  endforeach
+endif
 
 env = environment()
 
@@ -623,5 +678,12 @@ env.set('srcdir', meson.current_source_dir())
 test('cairo', exe,
   timeout: 60 * 60,
   env: env,
+  suite: ['cairo-test-suite', 'slow'],
   workdir: meson.current_build_dir(),
   depends: test_depends)
+
+# The SVG renderer debug tools can only be built if the _cairo_debug_svg_render()
+# function has been exposed by defining DEBUG_SVG_RENDER
+if conf.get('HAVE_FT_SVG_DOCUMENT', 0) == 1 and cc.get_define('DEBUG_SVG_RENDER') != ''
+  subdir('svg')
+endif

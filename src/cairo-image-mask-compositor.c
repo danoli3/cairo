@@ -104,7 +104,7 @@ static inline uint32_t
 color_to_uint32 (const cairo_color_t *color)
 {
     return
-        (color->alpha_short >> 8 << 24) |
+        ((uint32_t)color->alpha_short >> 8 << 24) |
         (color->red_short >> 8 << 16)   |
         (color->green_short & 0xff00)   |
         (color->blue_short >> 8);
@@ -387,9 +387,10 @@ composite_boxes (void			*_dst,
 const cairo_compositor_t *
 _cairo_image_mask_compositor_get (void)
 {
+    static cairo_atomic_once_t once = CAIRO_ATOMIC_ONCE_INIT;
     static cairo_mask_compositor_t compositor;
 
-    if (compositor.base.delegate == NULL) {
+    if (_cairo_atomic_init_once_enter(&once)) {
 	_cairo_mask_compositor_init (&compositor,
 				     _cairo_image_traps_compositor_get ());
 	compositor.acquire = acquire;
@@ -405,6 +406,8 @@ _cairo_image_mask_compositor_get (void)
 	compositor.composite = composite;
 	//compositor.check_composite_boxes = check_composite_boxes;
 	compositor.composite_boxes = composite_boxes;
+
+	_cairo_atomic_init_once_leave(&once);
     }
 
     return &compositor.base;

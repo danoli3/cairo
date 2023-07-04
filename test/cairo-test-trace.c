@@ -52,8 +52,6 @@
  *     scope of this test.
  */
 
-#define _GNU_SOURCE 1	/* getline() */
-
 #include "cairo-test.h"
 #include "buffer-diff.h"
 
@@ -793,7 +791,8 @@ matches_reference (struct slave *slave)
 			int channel;
 
 			for (channel = 0; channel < 4; channel++) {
-			    unsigned va, vb, diff;
+			    int va, vb;
+			    unsigned diff;
 
 			    va = (ua[x] >> (channel*8)) & 0xff;
 			    vb = (ub[x] >> (channel*8)) & 0xff;
@@ -817,7 +816,8 @@ matches_reference (struct slave *slave)
 			int channel;
 
 			for (channel = 0; channel < 3; channel++) {
-			    unsigned va, vb, diff;
+			    int va, vb;
+			    unsigned diff;
 
 			    va = (ua[x] >> (channel*8)) & 0xff;
 			    vb = (ub[x] >> (channel*8)) & 0xff;
@@ -858,6 +858,8 @@ matches_reference (struct slave *slave)
 
 	case CAIRO_FORMAT_RGB30:
 	case CAIRO_FORMAT_RGB16_565:
+        case CAIRO_FORMAT_RGB96F:
+        case CAIRO_FORMAT_RGBA128F:
 	case CAIRO_FORMAT_INVALID:
 	    assert (0);
 	}
